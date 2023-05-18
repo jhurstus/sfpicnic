@@ -40,7 +40,9 @@ for (const id of FACILITY_IDS) {
     const reservationCell = targetDateCell.parentElement?.nextElementSibling?.querySelector('a');
     if (reservationCell && reservationCell.innerHTML.indexOf(' to ') > 0) {
       const centerLink = 'https://www.google.com/search?q=san+francisco+park+' + center?.replace(/ /g, '+');
-      const reserveLink = `https://apm.activecommunities.com/sfrecpark/ActiveNet_Home?FileName=makeOnlineQuickReservation.sdi&facility_id=${id}&online=true&check_availability=true&quick_finish=true&begy=${year}&begm=${month}&begd=${day}&IsCalendar=true&TypeID=0&LocationID=0&KeywordID=0&year=${year}&month=${month + 1}&startyear=${year}&endyear=${year}`;
+      // Reservation page month CGI arg uses 0-indexed months, unlike other park&rec pages. 
+      const reserveMonth = String(Number(month) - 1).replace(/^0/, '');
+      const reserveLink = `https://apm.activecommunities.com/sfrecpark/ActiveNet_Home?FileName=makeOnlineQuickReservation.sdi&facility_id=${id}&online=true&check_availability=true&quick_finish=true&begy=${year}&begm=${reserveMonth}&begd=${day}&IsCalendar=true&TypeID=0&LocationID=0&KeywordID=0&year=${year}&month=${reserveMonth}&startyear=${year}&endyear=${year}`;
       out += `<tr><td>${facility}</td><td><a href="${centerLink}">${center}</a></td><td><a href="${url}">calendar</a> <a href="${reserveLink}">reserve</a></td></tr>`;
     }
   }));
